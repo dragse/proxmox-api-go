@@ -145,6 +145,4 @@ local.properties
 !.vscode/launch.json
 !.vscode/extensions.json
 
-main.go
-
 .idea
