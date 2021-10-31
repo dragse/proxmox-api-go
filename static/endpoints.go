@@ -26,14 +26,13 @@ const (
 	EndpointNodes_Node_Qemu_VMID_StatusStop     Endpoint = "/nodes/{val}/qemu/{val}/status/stop"
 	EndpointNodes_Node_Qemu_VMID_StatusSuspend  Endpoint = "/nodes/{val}/qemu/{val}/status/suspend"
 	EndpointNodes_node_Qemu_VMID_Config         Endpoint = "/nodes/{val}/qemu/{val}/config"
-
-	EndpointNodes_Node_Status     Endpoint = "/nodes/{val}/status"
-	EndpointNodes_Node_Version    Endpoint = "/nodes/{val}/version"
-	EndpointNodes_Node_Time       Endpoint = "/nodes/{val}/time"
-	EndpointNodes_Node_Config     Endpoint = "/nodes/{val}/config"
-	EndpointNodes_Node_DNS        Endpoint = "/nodes/{val}/dns"
-	EndpointNodes_Node_Migrateall Endpoint = "/nodes/{val}/migrateall"
-	EndpointNodes_Node_Wakeonlan  Endpoint = "/nodes/{val}/wakeonlan"
+	EndpointNodes_Node_Status                   Endpoint = "/nodes/{val}/status"
+	EndpointNodes_Node_Version                  Endpoint = "/nodes/{val}/version"
+	EndpointNodes_Node_Time                     Endpoint = "/nodes/{val}/time"
+	EndpointNodes_Node_Config                   Endpoint = "/nodes/{val}/config"
+	EndpointNodes_Node_DNS                      Endpoint = "/nodes/{val}/dns"
+	EndpointNodes_Node_Migrateall               Endpoint = "/nodes/{val}/migrateall"
+	EndpointNodes_Node_Wakeonlan                Endpoint = "/nodes/{val}/wakeonlan"
 
 	EndpointVersion Endpoint = "/version"
 )

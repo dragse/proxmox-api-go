@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/dragse/proxmox-api-go/client"
 	"github.com/dragse/proxmox-api-go/proxmox"
-	"github.com/dragse/proxmox-api-go/static"
 	"log"
 )
 
@@ -30,9 +29,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	proxCluster.Get(static.EndpointClusterStatus)
+	m, _ := proxCluster.GetNodes()
 
-	test, _ := json.Marshal(proxCluster)
+	test, _ := json.Marshal(m)
 	log.Println(string(test))
 
 }
