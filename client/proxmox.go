@@ -7,7 +7,7 @@ import (
 	"errors"
 	error2 "github.com/dragse/proxmox-api-go/error"
 	"github.com/dragse/proxmox-api-go/responses"
-	"github.com/dragse/proxmox-api-go/static"
+	"github.com/dragse/proxmox-api-go/static/endpoints"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -51,7 +51,7 @@ func (proxmoxHost *ProxmoxSession) SetupClient() error {
 }
 
 func (proxmox ProxmoxSession) TestConnection() error {
-	_, err := proxmox.Get(static.EndpointVersion)
+	_, err := proxmox.Get(endpoints.EndpointVersion)
 
 	if err != nil {
 		return err
@@ -60,7 +60,7 @@ func (proxmox ProxmoxSession) TestConnection() error {
 	return nil
 }
 
-func (host ProxmoxSession) PostForm(endpoint static.Endpoint, form url.Values) (*responses.ProxmoxResponse, error) {
+func (host ProxmoxSession) PostForm(endpoint endpoints.Endpoint, form url.Values) (*responses.ProxmoxResponse, error) {
 	var target string
 	var req *http.Request
 
@@ -79,7 +79,7 @@ func (host ProxmoxSession) PostForm(endpoint static.Endpoint, form url.Values) (
 	return host.handleRequest(req)
 }
 
-func (host ProxmoxSession) Get(endpoint static.Endpoint) (*responses.ProxmoxResponse, error) {
+func (host ProxmoxSession) Get(endpoint endpoints.Endpoint) (*responses.ProxmoxResponse, error) {
 	target := host.formatProxmoxAPI(endpoint)
 
 	req, err := http.NewRequest("GET", target, nil)
@@ -93,7 +93,7 @@ func (host ProxmoxSession) Get(endpoint static.Endpoint) (*responses.ProxmoxResp
 	return host.handleRequest(req)
 }
 
-func (host ProxmoxSession) formatProxmoxAPI(endpoint static.Endpoint) string {
+func (host ProxmoxSession) formatProxmoxAPI(endpoint endpoints.Endpoint) string {
 	return "https://" + host.Hostname + "/api2/json" + string(endpoint)
 }
 

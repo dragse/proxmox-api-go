@@ -3,12 +3,12 @@ package proxmox
 import (
 	"encoding/json"
 	"github.com/dragse/proxmox-api-go/responses"
-	"github.com/dragse/proxmox-api-go/static"
+	"github.com/dragse/proxmox-api-go/static/endpoints"
 )
 
 func (proxmoxCluster ProxmoxCluster) GetNodes() ([]*responses.NodeInformation, error) {
 	var nodes []*responses.NodeInformation
-	resp, err := proxmoxCluster.Get(static.EndpointNodes)
+	resp, err := proxmoxCluster.Get(endpoints.Nodes)
 
 	if err != nil {
 		return nil, err

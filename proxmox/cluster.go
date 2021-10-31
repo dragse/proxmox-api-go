@@ -5,7 +5,7 @@ import (
 	"github.com/dragse/proxmox-api-go/client"
 	error2 "github.com/dragse/proxmox-api-go/error"
 	"github.com/dragse/proxmox-api-go/responses"
-	"github.com/dragse/proxmox-api-go/static"
+	"github.com/dragse/proxmox-api-go/static/endpoints"
 	"log"
 )
 
@@ -83,7 +83,7 @@ func (proxmoxCluster *ProxmoxCluster) getOnlineSession() (*client.ProxmoxSession
 func (proxmoxCluster *ProxmoxCluster) InitInformation() error {
 
 	var respList []*json.RawMessage
-	clusterStatusResponse, err := proxmoxCluster.Get(static.EndpointClusterStatus)
+	clusterStatusResponse, err := proxmoxCluster.Get(endpoints.ClusterStatus)
 
 	if err != nil {
 		return err
@@ -131,7 +131,7 @@ func (proxmoxCluster *ProxmoxCluster) InitInformation() error {
 	return nil
 }
 
-func (proxmoxCluster ProxmoxCluster) Get(endpoint static.Endpoint) (*responses.ProxmoxResponse, error) {
+func (proxmoxCluster ProxmoxCluster) Get(endpoint endpoints.Endpoint) (*responses.ProxmoxResponse, error) {
 	var session *client.ProxmoxSession
 	var err error
 
