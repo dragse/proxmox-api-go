@@ -62,61 +62,45 @@ func (proxmox ProxmoxSession) TestConnection() error {
 
 func (host ProxmoxSession) PostForm(endpoint static.Endpoint, form url.Values) (*responses.ProxmoxResponse, error) {
 	var target string
-	var data responses.ProxmoxResponse
 	var req *http.Request
 
-	target = "https://" + host.Hostname + "/api2/json" + string(endpoint)
+	target = host.formatProxmoxAPI(endpoint)
 
 	req, err := http.NewRequest("POST", target, bytes.NewBufferString(form.Encode()))
+
+	if err != nil {
+		return nil, err
+	}
 
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Content-Length", strconv.Itoa(len(form.Encode())))
 	req.Header.Add("Authorization", "PVEAPIToken="+host.Username+"="+host.Token)
 
-	r, err := host.Client.Do(req)
-
-	if err != nil {
-		urlError := err.(*url.Error)
-
-		if urlError.Timeout() {
-			return nil, error2.SessionOfflineError{
-				Host: host.Hostname,
-			}
-		}
-
-		return nil, err
-	}
-
-	if r.StatusCode != 200 {
-		return nil, errors.New("HTTP Error " + r.Status)
-	}
-
-	response, err := ioutil.ReadAll(r.Body)
-	r.Body.Close()
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(response, &data)
-	if err != nil {
-		return nil, err
-	}
-
-	return &data, nil
+	return host.handleRequest(req)
 }
 
 func (host ProxmoxSession) Get(endpoint static.Endpoint) (*responses.ProxmoxResponse, error) {
-	var target string
-	var data responses.ProxmoxResponse
-
-	target = "https://" + host.Hostname + "/api2/json" + string(endpoint)
+	target := host.formatProxmoxAPI(endpoint)
 
 	req, err := http.NewRequest("GET", target, nil)
 
+	if err != nil {
+		return nil, err
+	}
+
 	req.Header.Add("Authorization", "PVEAPIToken="+host.Username+"="+host.Token)
 
-	r, err := host.Client.Do(req)
+	return host.handleRequest(req)
+}
+
+func (host ProxmoxSession) formatProxmoxAPI(endpoint static.Endpoint) string {
+	return "https://" + host.Hostname + "/api2/json" + string(endpoint)
+}
+
+func (host ProxmoxSession) handleRequest(request *http.Request) (*responses.ProxmoxResponse, error) {
+	var data responses.ProxmoxResponse
+
+	r, err := host.Client.Do(request)
 
 	if err != nil {
 		urlError := err.(*url.Error)
