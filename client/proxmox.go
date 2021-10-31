@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"errors"
+	error2 "github.com/dragse/proxmox-api-go/error"
 	"github.com/dragse/proxmox-api-go/responses"
 	"github.com/dragse/proxmox-api-go/static"
 	"io/ioutil"
@@ -16,34 +17,34 @@ import (
 type ProxmoxSession struct {
 	Hostname string
 	Username string
-	Token string
+	Token    string
 
 	VerifySSL bool
-	Client *http.Client
+	Client    *http.Client
 }
 
-func (proxmoxHost *ProxmoxSession) SetupClient() error  {
+func (proxmoxHost *ProxmoxSession) SetupClient() error {
 	var tr *http.Transport
 
 	if proxmoxHost.VerifySSL {
 		tr = &http.Transport{
-			DisableKeepAlives:      false,
-			IdleConnTimeout:        0,
-			MaxIdleConns:           200,
-			MaxIdleConnsPerHost:    100,
+			DisableKeepAlives:   false,
+			IdleConnTimeout:     0,
+			MaxIdleConns:        200,
+			MaxIdleConnsPerHost: 100,
 		}
 	} else {
 		tr = &http.Transport{
-			DisableKeepAlives:      false,
-			IdleConnTimeout:        0,
-			MaxIdleConns:           200,
-			MaxIdleConnsPerHost:    100,
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			DisableKeepAlives:   false,
+			IdleConnTimeout:     0,
+			MaxIdleConns:        200,
+			MaxIdleConnsPerHost: 100,
+			TLSClientConfig:     &tls.Config{InsecureSkipVerify: true},
 		}
 	}
 
 	proxmoxHost.Client = &http.Client{
-		Transport:     tr,
+		Transport: tr,
 	}
 
 	return nil
@@ -70,11 +71,19 @@ func (host ProxmoxSession) PostForm(endpoint static.Endpoint, form url.Values) (
 
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Content-Length", strconv.Itoa(len(form.Encode())))
-	req.Header.Add("Authorization", "PVEAPIToken=" + host.Username + "=" + host.Token)
+	req.Header.Add("Authorization", "PVEAPIToken="+host.Username+"="+host.Token)
 
 	r, err := host.Client.Do(req)
 
 	if err != nil {
+		urlError := err.(*url.Error)
+
+		if urlError.Timeout() {
+			return nil, error2.SessionOfflineError{
+				Host: host.Hostname,
+			}
+		}
+
 		return nil, err
 	}
 
@@ -105,11 +114,19 @@ func (host ProxmoxSession) Get(endpoint static.Endpoint) (*responses.ProxmoxResp
 
 	req, err := http.NewRequest("GET", target, nil)
 
-	req.Header.Add("Authorization", "PVEAPIToken=" + host.Username + "=" + host.Token)
+	req.Header.Add("Authorization", "PVEAPIToken="+host.Username+"="+host.Token)
 
 	r, err := host.Client.Do(req)
 
 	if err != nil {
+		urlError := err.(*url.Error)
+
+		if urlError.Timeout() {
+			return nil, error2.SessionOfflineError{
+				Host: host.Hostname,
+			}
+		}
+
 		return nil, err
 	}
 

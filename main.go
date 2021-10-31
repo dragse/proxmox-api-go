@@ -29,7 +29,7 @@ func main() {
 
 	log.Println("Login Success")
 
-	content, err := hist.Get(static.EndpointNodes)
+	content, err := hist.Get(static.EndpointClusterStatus)
 
 	m := content.Data
 	test, _ := json.Marshal(m)
