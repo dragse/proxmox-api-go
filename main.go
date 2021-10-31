@@ -3,36 +3,36 @@ package main
 import (
 	"encoding/json"
 	"github.com/dragse/proxmox-api-go/client"
+	"github.com/dragse/proxmox-api-go/proxmox"
 	"github.com/dragse/proxmox-api-go/static"
 	"log"
 )
 
 func main() {
-	hist := client.ProxmoxSession{
+	session := client.ProxmoxSession{
 		Hostname:  "192.168.1.205:8006",
 		Username:  "prox-api@pve!test-token",
 		Token:     "1fedfb41-b8f3-40a7-8707-6f40fe617d19",
 		VerifySSL: false,
 	}
 
-	err := hist.SetupClient()
+	proxCluster := proxmox.NewProxmoxCluster()
+
+	err := proxCluster.AddSession(&session)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = hist.TestConnection()
+	err = proxCluster.InitInformation()
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println("Login Success")
+	proxCluster.Get(static.EndpointClusterStatus)
 
-	content, err := hist.Get(static.EndpointClusterStatus)
-
-	m := content.Data
-	test, _ := json.Marshal(m)
+	test, _ := json.Marshal(proxCluster)
 	log.Println(string(test))
 
 }
