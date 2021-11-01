@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/dragse/proxmox-api-go/client"
 	"github.com/dragse/proxmox-api-go/proxmox"
+	"github.com/dragse/proxmox-api-go/static/timezone"
 	"log"
 )
 
@@ -29,7 +30,7 @@ func main() {
 	}
 
 	//m, err := proxCluster.Get(endpoints.Nodes_Node_Time.FormatValues("pve"))
-	err = proxCluster.UpdateNodeTimezone("pve", "Europe/Berlin")
+	err = proxCluster.UpdateNodeTimezone("pve", timezone.Europe_Berlin)
 
 	if err != nil {
 		log.Fatal(err)
