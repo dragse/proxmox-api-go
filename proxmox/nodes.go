@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/dragse/proxmox-api-go/responses/node"
 	"github.com/dragse/proxmox-api-go/static/endpoints"
+	"github.com/dragse/proxmox-api-go/static/timezone"
 	"net/url"
 )
 
@@ -58,9 +59,9 @@ func (proxmoxCluster ProxmoxCluster) GetNodeTime(nodeName string) (*node.TimeInf
 	return data, nil
 }
 
-func (proxmoxCluster ProxmoxCluster) UpdateNodeTimezone(nodeName string, timezone string) error {
+func (proxmoxCluster ProxmoxCluster) UpdateNodeTimezone(nodeName string, timezone timezone.Timezone) error {
 	form := url.Values{
-		"timezone": {timezone},
+		"timezone": {string(timezone)},
 	}
 
 	_, err := proxmoxCluster.PutForm(endpoints.Nodes_Node_Time.FormatValues(nodeName), form)
