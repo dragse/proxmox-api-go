@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/dragse/proxmox-api-go/client"
 	"github.com/dragse/proxmox-api-go/proxmox"
 	"log"
@@ -29,9 +28,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	m, _ := proxCluster.GetNodes()
+	//m, err := proxCluster.Get(endpoints.Nodes_Node_Time.FormatValues("pve"))
+	err = proxCluster.UpdateNodeTimezone("pve", "Europe/Berlin")
 
-	test, _ := json.Marshal(m)
-	log.Println(string(test))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//test, _ := json.Marshal(m)
+	//log.Println(string(test))
 
 }

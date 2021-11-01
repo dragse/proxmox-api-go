@@ -5,15 +5,17 @@ import (
 	"github.com/dragse/proxmox-api-go/client"
 	error2 "github.com/dragse/proxmox-api-go/error"
 	"github.com/dragse/proxmox-api-go/responses"
+	"github.com/dragse/proxmox-api-go/responses/node"
 	"github.com/dragse/proxmox-api-go/static/endpoints"
 	"log"
+	"net/url"
 )
 
 type ProxmoxCluster struct {
 	sessions []*client.ProxmoxSession
 
 	Cluster *responses.ClusterStatusInformation `json:"cluster"`
-	Nodes   []*responses.NodeStatusInformation  `json:"nodes"`
+	Nodes   []*node.StatusInformation           `json:"nodes"`
 
 	currentSessionID int
 }
@@ -22,7 +24,7 @@ func NewProxmoxCluster() *ProxmoxCluster {
 	return &ProxmoxCluster{
 		sessions:         make([]*client.ProxmoxSession, 0),
 		Cluster:          nil,
-		Nodes:            make([]*responses.NodeStatusInformation, 0),
+		Nodes:            make([]*node.StatusInformation, 0),
 		currentSessionID: -1,
 	}
 }
@@ -118,7 +120,7 @@ func (proxmoxCluster *ProxmoxCluster) InitInformation() error {
 
 			proxmoxCluster.Cluster = &clusterInfo
 		case "node":
-			var nodeInfo responses.NodeStatusInformation
+			var nodeInfo node.StatusInformation
 			err = json.Unmarshal(*ele, &nodeInfo)
 
 			if err != nil {
@@ -131,7 +133,25 @@ func (proxmoxCluster *ProxmoxCluster) InitInformation() error {
 	return nil
 }
 
+func (proxmoxCluster ProxmoxCluster) PostForm(endpoint endpoints.Endpoint, form url.Values) (*responses.ProxmoxResponse, error) {
+	return proxmoxCluster.execute(func(session *client.ProxmoxSession) (*responses.ProxmoxResponse, error) {
+		return session.PostForm(endpoint, form)
+	})
+}
+
+func (proxmoxCluster ProxmoxCluster) PutForm(endpoint endpoints.Endpoint, form url.Values) (*responses.ProxmoxResponse, error) {
+	return proxmoxCluster.execute(func(session *client.ProxmoxSession) (*responses.ProxmoxResponse, error) {
+		return session.PutForm(endpoint, form)
+	})
+}
+
 func (proxmoxCluster ProxmoxCluster) Get(endpoint endpoints.Endpoint) (*responses.ProxmoxResponse, error) {
+	return proxmoxCluster.execute(func(session *client.ProxmoxSession) (*responses.ProxmoxResponse, error) {
+		return session.Get(endpoint)
+	})
+}
+
+func (proxmoxCluster ProxmoxCluster) execute(data func(session *client.ProxmoxSession) (*responses.ProxmoxResponse, error)) (*responses.ProxmoxResponse, error) {
 	var session *client.ProxmoxSession
 	var err error
 
@@ -145,7 +165,7 @@ func (proxmoxCluster ProxmoxCluster) Get(endpoint endpoints.Endpoint) (*response
 		session = proxmoxCluster.sessions[proxmoxCluster.currentSessionID]
 	}
 
-	response, err := session.Get(endpoint)
+	response, err := data(session)
 
 	if err != nil {
 		proxError, ok := err.(error2.SessionOfflineError)
@@ -161,7 +181,7 @@ func (proxmoxCluster ProxmoxCluster) Get(endpoint endpoints.Endpoint) (*response
 			return nil, err
 		}
 
-		response, err = session.Get(endpoint)
+		response, err = data(session)
 
 		if err != nil {
 			_, ok := err.(error2.SessionOfflineError)

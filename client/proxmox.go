@@ -79,6 +79,25 @@ func (host ProxmoxSession) PostForm(endpoint endpoints.Endpoint, form url.Values
 	return host.handleRequest(req)
 }
 
+func (host ProxmoxSession) PutForm(endpoint endpoints.Endpoint, form url.Values) (*responses.ProxmoxResponse, error) {
+	var target string
+	var req *http.Request
+
+	target = host.formatProxmoxAPI(endpoint)
+
+	req, err := http.NewRequest("PUT", target, bytes.NewBufferString(form.Encode()))
+
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Length", strconv.Itoa(len(form.Encode())))
+	req.Header.Add("Authorization", "PVEAPIToken="+host.Username+"="+host.Token)
+
+	return host.handleRequest(req)
+}
+
 func (host ProxmoxSession) Get(endpoint endpoints.Endpoint) (*responses.ProxmoxResponse, error) {
 	target := host.formatProxmoxAPI(endpoint)
 
