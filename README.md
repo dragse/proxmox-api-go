@@ -10,7 +10,7 @@ The Proxmox API in golang. This Framework is still work in progress.
 
 Create at first a cluster object from where you can work with
 
-```
+```go
 proxCluster := proxmox.NewProxmoxCluster()
 ```
 
@@ -18,7 +18,7 @@ After that you need to add all Nodes you want to connect. It is recommended to c
 cluster and want high availability, if one node is offline or something like it.  
 The Cluster work with api tokens, you need to generate
 
-```
+```go
 session := client.ProxmoxSession{
     Hostname:  "hostname of the proxmox node",
     Username:  "username@pve!token-name",
@@ -28,8 +28,8 @@ session := client.ProxmoxSession{
 
 The last step is to init the cluster information
 
-````
-err = proxCluster.InitInformation()
+````go
+err := proxCluster.InitInformation()
 
 if err != nil {
     log.Fatal(err)
