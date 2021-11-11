@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/dragse/proxmox-api-go/client"
 	"github.com/dragse/proxmox-api-go/proxmox"
-	"github.com/dragse/proxmox-api-go/static/timezone"
+	"github.com/dragse/proxmox-api-go/proxmox/builder"
+	"github.com/dragse/proxmox-api-go/static/operation_system"
+	"github.com/dragse/proxmox-api-go/util"
 	"log"
 )
 
@@ -29,14 +32,26 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//m, err := proxCluster.Get(endpoints.Nodes_Node_Time.FormatValues("pve"))
-	err = proxCluster.UpdateNodeTimezone("pve", timezone.Europe_Berlin)
+	//m, err := proxCluster.Get(endpoints.Nodes_Node_Qemu.FormatValues("pve"))
+	builder := builder.NewVmBuilder().
+		SetID("434").
+		SetName("testvm").
+		SetCPUType("host").
+		SetSocket(1).
+		SetCoresPerSocket(3).
+		SetMemory(util.NewBytesFromGigaBytes(4)).
+		SetIso("local", "debian-11.0.0-amd64-netinst.iso").
+		SetOSType(operation_system.L24).
+		AddNetwork("vmbr0").
+		AddStorage("local-lvm", "32")
+
+	m, err := proxCluster.CreateVM("pve", builder)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//test, _ := json.Marshal(m)
-	//log.Println(string(test))
+	test, _ := json.Marshal(m)
+	log.Println(string(test))
 
 }

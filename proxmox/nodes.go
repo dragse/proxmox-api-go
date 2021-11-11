@@ -3,6 +3,7 @@ package proxmox
 import (
 	"encoding/json"
 	"github.com/dragse/proxmox-api-go/responses/node"
+	"github.com/dragse/proxmox-api-go/responses/node/vm"
 	"github.com/dragse/proxmox-api-go/static/endpoints"
 	"github.com/dragse/proxmox-api-go/static/timezone"
 	"net/url"
@@ -71,4 +72,21 @@ func (proxmoxCluster ProxmoxCluster) UpdateNodeTimezone(nodeName string, timezon
 	}
 
 	return nil
+}
+
+func (proxmoxCluster ProxmoxCluster) GetNodeVMs(nodeName string) ([]*vm.Information, error) {
+	var vms []*vm.Information
+	resp, err := proxmoxCluster.Get(endpoints.Nodes_Node_Qemu.FormatValues(nodeName))
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(*resp.Data, &vms)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return vms, nil
 }
