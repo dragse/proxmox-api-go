@@ -1,11 +1,7 @@
 package vm
 
 import (
-	"encoding/json"
 	"github.com/dragse/proxmox-api-go/client"
-	"github.com/dragse/proxmox-api-go/responses/node/vm"
-	"github.com/dragse/proxmox-api-go/static/endpoints"
-	"strconv"
 )
 
 type ProxmoxVM struct {
@@ -21,21 +17,4 @@ func NewProxmoxVM(client *client.ProxmoxClient, nodeName string, vmID int) *Prox
 		NodeName: nodeName,
 		VmID:     vmID,
 	}
-}
-
-func (proxmoxCluster ProxmoxVM) GetVMStatus() (*vm.Detail, error) {
-	var data vm.Detail
-	resp, err := proxmoxCluster.client.Get(endpoints.Nodes_Node_Qemu_VMID_StatusCurrent.FormatValues(proxmoxCluster.NodeName, strconv.Itoa(proxmoxCluster.VmID)))
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(*resp.Data, &data)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &data, nil
 }

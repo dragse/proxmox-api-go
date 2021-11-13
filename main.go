@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/dragse/proxmox-api-go/client"
 	"github.com/dragse/proxmox-api-go/proxmox"
+	"github.com/dragse/proxmox-api-go/static/status"
 	"log"
 )
 
@@ -44,7 +45,7 @@ func main() {
 		AddStorage("local-lvm", "5")
 	m, err := proxCluster.CreateVM("pve", builder)*/
 
-	m, err := proxCluster.GetNode("test-pve").GetVM(434).GetVMStatus()
+	m, err := proxCluster.GetNode("test-pve").GetVM(434).UpdateVMStatus(status.Stop)
 
 	if err != nil {
 		log.Fatal(err)
