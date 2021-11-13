@@ -2,21 +2,38 @@
 
 The Proxmox API in golang. This Framework is still work in progress.
 
+## Features
+
+### Cluster
+- [x] Version Endpoint
+
+### Node
+- [x] List all Nodes
+- [x] List all VMs of the Node
+- [x] Get Node Status of a specific Node
+- [x] Get Time Configuration of a specific Node
+- [x] Update Time Zone of a specific node
+
+### VM
+- [x] Create VM
+- [x] Get VM Status
+- [x] Update VM Status
+
 ## Installation
 
 ``go get github.com/DragSE/proxmox-api-go``
 
 ## Usage
 
-Create at first a cluster object from where you can work with
+Create at first a client object. This objects manage and handle the http connections to the nodes
 
 ```go
-proxCluster := proxmox.NewProxmoxCluster()
+proxClient := client.NewProxmoxClient()
 ```
 
 After that you need to add all Nodes you want to connect. It is recommended to connect to multiple nodes if you have a 
-cluster and want high availability, if one node is offline or something like it.  
-The Cluster work with api tokens, you need to generate
+cluster and want high availability  
+The Cluster work with api tokens, you need to generate before.
 
 ```go
 session := client.ProxmoxSession{
@@ -24,16 +41,25 @@ session := client.ProxmoxSession{
     Username:  "username@pve!token-name",
     Token:     "apitoken",
 }
-```
 
-The last step is to init the cluster information
-
-````go
-err := proxCluster.InitInformation()
+err := proxClient.AddSession(&session)
 
 if err != nil {
     log.Fatal(err)
 }
+```
+
+The last step is to create the Cluster and init the information
+
+````go
+proxCluster := proxmox.NewProxmoxCluster(proxClient)
+
+err = proxCluster.InitInformation()
+
+if err != nil {
+    log.Fatal(err)
+}
+
 ````
 
 Now you can use the different methods to get or change Information of the cluster 
