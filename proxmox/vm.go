@@ -9,7 +9,7 @@ import (
 
 func (proxmoxCluster ProxmoxCluster) CreateVM(nodeName string, builder *builder.VmBuilder) (string, error) {
 	var data string
-	resp, err := proxmoxCluster.PostForm(endpoints.Nodes_Node_Qemu.FormatValues(nodeName), builder.BuildToValues())
+	resp, err := proxmoxCluster.client.PostForm(endpoints.Nodes_Node_Qemu.FormatValues(nodeName), builder.BuildToValues())
 
 	if err != nil {
 		return "", err
@@ -26,7 +26,7 @@ func (proxmoxCluster ProxmoxCluster) CreateVM(nodeName string, builder *builder.
 
 func (proxmoxCluster ProxmoxCluster) GetVMStatus(nodeName string, vmid string) (*vm.Detail, error) {
 	var data vm.Detail
-	resp, err := proxmoxCluster.Get(endpoints.Nodes_Node_Qemu_VMID_StatusCurrent.FormatValues(nodeName, vmid))
+	resp, err := proxmoxCluster.client.Get(endpoints.Nodes_Node_Qemu_VMID_StatusCurrent.FormatValues(nodeName, vmid))
 
 	if err != nil {
 		return nil, err

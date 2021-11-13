@@ -11,7 +11,7 @@ import (
 
 func (proxmoxCluster ProxmoxCluster) GetNodes() ([]*node.Information, error) {
 	var nodes []*node.Information
-	resp, err := proxmoxCluster.Get(endpoints.Nodes)
+	resp, err := proxmoxCluster.client.Get(endpoints.Nodes)
 
 	if err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func (proxmoxCluster ProxmoxCluster) GetNodes() ([]*node.Information, error) {
 
 func (proxmoxCluster ProxmoxCluster) GetNodeStatus(nodeName string) (*node.Detail, error) {
 	var data *node.Detail
-	resp, err := proxmoxCluster.Get(endpoints.Nodes_Node_Status.FormatValues(nodeName))
+	resp, err := proxmoxCluster.client.Get(endpoints.Nodes_Node_Status.FormatValues(nodeName))
 
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func (proxmoxCluster ProxmoxCluster) GetNodeStatus(nodeName string) (*node.Detai
 
 func (proxmoxCluster ProxmoxCluster) GetNodeTime(nodeName string) (*node.TimeInformation, error) {
 	var data *node.TimeInformation
-	resp, err := proxmoxCluster.Get(endpoints.Nodes_Node_Time.FormatValues(nodeName))
+	resp, err := proxmoxCluster.client.Get(endpoints.Nodes_Node_Time.FormatValues(nodeName))
 
 	if err != nil {
 		return nil, err
@@ -65,7 +65,7 @@ func (proxmoxCluster ProxmoxCluster) UpdateNodeTimezone(nodeName string, timezon
 		"timezone": {string(timezone)},
 	}
 
-	_, err := proxmoxCluster.PutForm(endpoints.Nodes_Node_Time.FormatValues(nodeName), form)
+	_, err := proxmoxCluster.client.PutForm(endpoints.Nodes_Node_Time.FormatValues(nodeName), form)
 
 	if err != nil {
 		return err
@@ -76,7 +76,7 @@ func (proxmoxCluster ProxmoxCluster) UpdateNodeTimezone(nodeName string, timezon
 
 func (proxmoxCluster ProxmoxCluster) GetNodeVMs(nodeName string) ([]*vm.Information, error) {
 	var vms []*vm.Information
-	resp, err := proxmoxCluster.Get(endpoints.Nodes_Node_Qemu.FormatValues(nodeName))
+	resp, err := proxmoxCluster.client.Get(endpoints.Nodes_Node_Qemu.FormatValues(nodeName))
 
 	if err != nil {
 		return nil, err

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/dragse/proxmox-api-go/client"
 	"github.com/dragse/proxmox-api-go/proxmox"
-	"github.com/dragse/proxmox-api-go/static/endpoints"
 	"log"
 )
 
@@ -16,13 +15,14 @@ func main() {
 		VerifySSL: false,
 	}
 
-	proxCluster := proxmox.NewProxmoxCluster()
-
-	err := proxCluster.AddSession(&session)
+	proxClient := client.NewProxmoxClient()
+	err := proxClient.AddSession(&session)
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	proxCluster := proxmox.NewProxmoxCluster(proxClient)
 
 	err = proxCluster.InitInformation()
 
@@ -30,7 +30,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	m, err := proxCluster.Get(endpoints.Nodes_Node_Qemu_VMID_StatusCurrent.FormatValues("pve", "100"))
+	//m, err := proxCluster.Get(endpoints.Nodes_Node_Qemu_VMID_StatusCurrent.FormatValues("pve", "100"))
 	/*builder := builder.NewVmBuilder().
 		SetID("434").
 		SetName("testvm").
@@ -41,9 +41,10 @@ func main() {
 		SetIso("local", "debian-11.0.0-amd64-netinst.iso").
 		SetOSType(operation_system.L24).
 		AddNetwork("vmbr0").
-		AddStorage("local-lvm", "32")
-
+		AddStorage("local-lvm", "5")
 	m, err := proxCluster.CreateVM("pve", builder)*/
+
+	m, err := proxCluster.GetVMStatus("test-pve", "434")
 
 	if err != nil {
 		log.Fatal(err)
