@@ -44,7 +44,7 @@ func main() {
 		AddStorage("local-lvm", "5")
 	m, err := proxCluster.CreateVM("pve", builder)*/
 
-	m, err := proxCluster.GetVMStatus("test-pve", "434")
+	m, err := proxCluster.GetNode("test-pve").GetVM(434).GetVMStatus()
 
 	if err != nil {
 		log.Fatal(err)
@@ -52,5 +52,4 @@ func main() {
 
 	test, _ := json.Marshal(m)
 	log.Println(string(test))
-
 }

@@ -2,11 +2,9 @@ package proxmox
 
 import (
 	"encoding/json"
+	node2 "github.com/dragse/proxmox-api-go/proxmox/node"
 	"github.com/dragse/proxmox-api-go/responses/node"
-	"github.com/dragse/proxmox-api-go/responses/node/vm"
 	"github.com/dragse/proxmox-api-go/static/endpoints"
-	"github.com/dragse/proxmox-api-go/static/timezone"
-	"net/url"
 )
 
 func (proxmoxCluster ProxmoxCluster) GetNodes() ([]*node.Information, error) {
@@ -26,67 +24,6 @@ func (proxmoxCluster ProxmoxCluster) GetNodes() ([]*node.Information, error) {
 	return nodes, nil
 }
 
-func (proxmoxCluster ProxmoxCluster) GetNodeStatus(nodeName string) (*node.Detail, error) {
-	var data *node.Detail
-	resp, err := proxmoxCluster.client.Get(endpoints.Nodes_Node_Status.FormatValues(nodeName))
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(*resp.Data, &data)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return data, nil
-}
-
-func (proxmoxCluster ProxmoxCluster) GetNodeTime(nodeName string) (*node.TimeInformation, error) {
-	var data *node.TimeInformation
-	resp, err := proxmoxCluster.client.Get(endpoints.Nodes_Node_Time.FormatValues(nodeName))
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(*resp.Data, &data)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return data, nil
-}
-
-func (proxmoxCluster ProxmoxCluster) UpdateNodeTimezone(nodeName string, timezone timezone.Timezone) error {
-	form := url.Values{
-		"timezone": {string(timezone)},
-	}
-
-	_, err := proxmoxCluster.client.PutForm(endpoints.Nodes_Node_Time.FormatValues(nodeName), form)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (proxmoxCluster ProxmoxCluster) GetNodeVMs(nodeName string) ([]*vm.Information, error) {
-	var vms []*vm.Information
-	resp, err := proxmoxCluster.client.Get(endpoints.Nodes_Node_Qemu.FormatValues(nodeName))
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(*resp.Data, &vms)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return vms, nil
+func (proxmoxCluster ProxmoxCluster) GetNode(nodeName string) *node2.ProxmoxNode {
+	return node2.NewProxmoxNode(nodeName, proxmoxCluster.client)
 }
