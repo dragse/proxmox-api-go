@@ -7,10 +7,10 @@ import (
 	"strconv"
 )
 
-func (proxmoxVm ProxmoxVM) CreateVNCProxy() (*vm.VNCProxy, error) {
-	var data vm.VNCProxy
+func (proxmoxVm ProxmoxVM) GetFirewallLog() ([]*vm.FirewallLog, error) {
+	var data []*vm.FirewallLog
 
-	resp, err := proxmoxVm.client.PostForm(endpoints.Nodes_node_Qemu_VMID_Vncproxy.FormatValues(proxmoxVm.NodeName, strconv.Itoa(proxmoxVm.VmID)), nil)
+	resp, err := proxmoxVm.client.Get(endpoints.Nodes_Node_Qemu_VMID_FirewallLog.FormatValues(proxmoxVm.NodeName, strconv.Itoa(proxmoxVm.VmID)))
 
 	if err != nil {
 		return nil, err
@@ -22,5 +22,5 @@ func (proxmoxVm ProxmoxVM) CreateVNCProxy() (*vm.VNCProxy, error) {
 		return nil, err
 	}
 
-	return &data, nil
+	return data, nil
 }
