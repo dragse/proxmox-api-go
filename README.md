@@ -16,6 +16,7 @@ The Proxmox API in golang. This Framework is still work in progress.
 
 ### VM
 - [x] Create VM
+- [x] Create VNC TCP Proxy
 - [x] Get VM Status
 - [x] Update VM Status
 
