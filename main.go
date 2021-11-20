@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/dragse/proxmox-api-go/client"
 	"github.com/dragse/proxmox-api-go/proxmox"
+	"github.com/dragse/proxmox-api-go/static/endpoints"
 	"log"
 )
 
@@ -30,7 +31,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//m, err := proxClient.Get(endpoints.Nodes_Node_Qemu_VMID_FirewallConfig.FormatValues("test-pve", "434"))
+	m, err := proxClient.Get(endpoints.Pools_Pool_.FormatValues("test"))
 	/*builder := builder.NewVmBuilder().
 		SetID("434").
 		SetName("testvm").
@@ -44,7 +45,7 @@ func main() {
 		AddStorage("local-lvm", "5")
 	m, err := proxCluster.CreateVM("pve", builder)*/
 
-	m, err := proxCluster.GetNode("test-pve").GetVM(434).GetFirewallLog()
+	//m, err := proxCluster.GetNode("test-pve").GetVM(434).GetFirewallLog()
 
 	if err != nil {
 		log.Fatal(err)
