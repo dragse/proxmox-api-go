@@ -20,3 +20,9 @@ type FirewallOption struct {
 	PolicyIn    firewall.Policy   `json:"policy_in"`
 	PolicyOut   firewall.Policy   `json:"policy_out"`
 }
+
+type IPSet struct {
+	Name    string `json:"name"`
+	Comment string `json:"comment"`
+	Digest  string `json:"digest"`
+}

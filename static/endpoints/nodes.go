@@ -6,6 +6,7 @@ const (
 	Nodes_Node_Qemu_VMID_                Endpoint = "/nodes/{val}/qemu/{val}"
 	Nodes_Node_Qemu_VMID_FirewallLog     Endpoint = "/nodes/{val}/qemu/{val}/firewall/log"
 	Nodes_Node_Qemu_VMID_FirewallOptions Endpoint = "/nodes/{val}/qemu/{val}/firewall/options"
+	Nodes_Node_Qemu_VMID_FirewallIpset   Endpoint = "/nodes/{val}/qemu/{val}/firewall/ipset"
 	Nodes_node_Qemu_VMID_CloudinitDump   Endpoint = "/nodes/{val}/qemu/{val}/cloudinit/dump"
 	Nodes_Node_Qemu_VMID_StatusCurrent   Endpoint = "/nodes/{val}/qemu/{val}/status/current"
 	Nodes_Node_Qemu_VMID_StatusReboot    Endpoint = "/nodes/{val}/qemu/{val}/status/reboot"

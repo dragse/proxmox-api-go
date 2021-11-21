@@ -20,6 +20,14 @@ The Proxmox API in golang. This Framework is still work in progress.
 - [x] Get VM Status
 - [x] Update VM Status
 - [x] Get Firewall Log
+- [x] Get Firewall Options
+- [x] Update Firewall Options
+- [x] List IPSets
+
+### Pools
+- [x] Create Pool
+- [x] List All Pools
+- [x] Show Pool Details
 
 ## Installation
 

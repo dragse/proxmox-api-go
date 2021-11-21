@@ -53,3 +53,21 @@ func (proxmoxVm ProxmoxVM) UpdateFirewallOptions(firewallBuilder *builder.Firewa
 
 	return nil
 }
+
+func (proxmoxVm ProxmoxVM) ListIPSets() ([]*vm.IPSet, error) {
+	var data []*vm.IPSet
+
+	resp, err := proxmoxVm.client.Get(endpoints.Nodes_Node_Qemu_VMID_FirewallIpset.FormatValues(proxmoxVm.NodeName, strconv.Itoa(proxmoxVm.VmID)))
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(*resp.Data, &data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
