@@ -74,3 +74,14 @@ if err != nil {
 ````
 
 Now you can use the different methods to get or change Information of the cluster 
+
+Support
+-------
+
+If you are having issues, please let us know.
+We have a mailing list located at: proxmox-apit@dragse.de
+
+License
+-------
+
+The project is licensed under the GPL-3.0 License.
