@@ -75,3 +75,21 @@ func (proxmoxCluster *ProxmoxCluster) InitInformation() error {
 	}
 	return nil
 }
+
+func (proxmoxCluster ProxmoxCluster) GetNextID() (string, error) {
+	var id string
+
+	clusterStatusResponse, err := proxmoxCluster.client.Get(endpoints.ClusterNextID)
+
+	if err != nil {
+		return "", err
+	}
+
+	err = json.Unmarshal(*clusterStatusResponse.Data, &id)
+
+	if err != nil {
+		return "", err
+	}
+
+	return id, nil
+}

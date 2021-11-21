@@ -6,6 +6,7 @@ The Proxmox API in golang. This Framework is still work in progress.
 
 ### Cluster
 - [x] Version Endpoint
+- [x] Get Next VM ID
 
 ### Node
 - [x] List all Nodes
