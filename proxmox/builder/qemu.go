@@ -84,7 +84,7 @@ func (b *VmBuilder) AddStorage(disk string, size string) *VmBuilder {
 	return b
 }
 
-func (b *VmBuilder) BuildToValues() url.Values {
+func (b VmBuilder) BuildToValues() url.Values {
 	params := url.Values{}
 	params.Add("vmid", b.id)
 	params.Add("name", b.name)
