@@ -9,11 +9,11 @@ func NewBytesFromBytes(bytes int64) *Byte {
 }
 
 func NewBytesFromMegaBytes(bytes int64) *Byte {
-	return &Byte{bytes: bytes * 1000}
+	return &Byte{bytes: bytes * 1000 * 1000}
 }
 
 func NewBytesFromGigaBytes(bytes int64) *Byte {
-	return &Byte{bytes: bytes * 1000 * 1000}
+	return &Byte{bytes: bytes * 1000 * 1000 * 1000}
 }
 
 func (b Byte) ToBytes() int64 {
@@ -21,7 +21,7 @@ func (b Byte) ToBytes() int64 {
 }
 
 func (b Byte) ToMegaByte() int64 {
-	return b.bytes / 1000
+	return b.bytes / 1000 / 1000
 }
 
 func (b Byte) ToGigaByte() int64 {
