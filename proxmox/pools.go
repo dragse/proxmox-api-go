@@ -2,6 +2,7 @@ package proxmox
 
 import (
 	"encoding/json"
+	"github.com/dragse/proxmox-api-go/proxmox/pool"
 	"github.com/dragse/proxmox-api-go/responses"
 	"github.com/dragse/proxmox-api-go/static/endpoints"
 	"net/url"
@@ -20,6 +21,10 @@ func (proxmoxCluster ProxmoxCluster) CreatePool(poolName string, comment string)
 	}
 
 	return nil
+}
+
+func (proxmoxCluster ProxmoxCluster) GetPool(poolName string) *pool.ProxmoxPool {
+	return pool.NewProxmoxPool(proxmoxCluster.client, poolName)
 }
 
 func (proxmoxCluster ProxmoxCluster) GetPools() ([]*responses.Pool, error) {

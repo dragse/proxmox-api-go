@@ -13,8 +13,8 @@ type ProxmoxPool struct {
 	PoolName string
 }
 
-func NewProxmoxPool(name string, client *client.ProxmoxClient) *ProxmoxPool {
-	return &ProxmoxPool{PoolName: name}
+func NewProxmoxPool(client *client.ProxmoxClient, name string) *ProxmoxPool {
+	return &ProxmoxPool{client: client, PoolName: name}
 }
 
 func (pool ProxmoxPool) GetDetail() (*responses.PoolDetail, error) {
