@@ -24,6 +24,10 @@ The Proxmox API in golang. This Framework is still work in progress.
 - [x] Get Firewall Options
 - [x] Update Firewall Options
 - [x] List IPSets
+- [x] Create IPSets
+- [x] Delete IPSets
+- [x] Add CIDR to IPSet
+- [x] Remove CIDR from IPSet
 
 ### Pools
 - [x] Create Pool

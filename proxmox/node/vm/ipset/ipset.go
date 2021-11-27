@@ -80,7 +80,7 @@ func (ipSet ProxmoxIPSet) AddIPNetwork(cidr string, comment string) error {
 }
 
 func (ipSet ProxmoxIPSet) DeleteIPNetwork(cidr string) error {
-	matched, err := regexp.MatchString("\\b(([2]([0-4][0-9]|[5][0-5])|[0-1]?[0-9]?[0-9])[.]){3}(([2]([0-4][0-9]|[5][0-5])|[0-1]?[0-9]?[0-9]))\\b\\/\\b([0-9]|[12][0-9]|3[0-2])\\b", cidr)
+	matched, err := regexp.MatchString("\\b(([2]([0-4][0-9]|[5][0-5])|[0-1]?[0-9]?[0-9])[.]){3}(([2]([0-4][0-9]|[5][0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/\\b([0-9]|[12][0-9]|3[0-2]))?\\b", cidr)
 
 	if err != nil {
 		return err
