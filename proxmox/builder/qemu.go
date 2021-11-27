@@ -24,6 +24,7 @@ type VmBuilder struct {
 	networks []string
 	storages []*storage
 	iso      *storage
+	pool     string
 }
 
 func NewVmBuilder() *VmBuilder {
@@ -69,6 +70,11 @@ func (b *VmBuilder) SetMemory(memory *util.Byte) *VmBuilder {
 	return b
 }
 
+func (b *VmBuilder) SetPool(pool string) *VmBuilder {
+	b.pool = pool
+	return b
+}
+
 func (b *VmBuilder) SetIso(disk string, isoFile string) *VmBuilder {
 	b.iso = &storage{storageType: disk, storageSize: isoFile}
 	return b
@@ -94,6 +100,10 @@ func (b VmBuilder) BuildToValues() url.Values {
 	params.Add("cores", strconv.Itoa(b.cores))
 	params.Add("memory", strconv.FormatInt(b.memory.ToMegaByte(), 10))
 	params.Add("cpu", b.cpuType)
+
+	if b.pool != "" {
+		params.Add("pool", b.pool)
+	}
 
 	if b.iso != nil {
 		params.Add("ide2", b.iso.storageType+":iso/"+b.iso.storageSize+",media=cdrom")

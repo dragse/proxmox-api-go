@@ -31,7 +31,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	m, err := proxClient.Get(endpoints.Nodes_Node_Qemu_VMID_FirewallIpset_Name__Cidr_.FormatValues("pve", "102", "test", "10.0.0.1"))
+	m, err := proxClient.Get(endpoints.ClusterHaStatusCurrent.FormatValues("pve", "102", "test", "10.0.0.1"))
 	/*builder := builder.NewVmBuilder().
 		SetID("434").
 		SetName("testvm").
@@ -42,8 +42,9 @@ func main() {
 		SetIso("local", "debian-11.0.0-amd64-netinst.iso").
 		SetOSType(operation_system.L24).
 		AddNetwork("vmbr0").
-		AddStorage("local-lvm", "5")
-	m, err := proxCluster.CreateVM("pve", builder)*/
+		AddStorage("local-lvm", "5").
+		SetPool("test")
+	m, err := proxCluster.GetNode("pve").CreateVM(builder)*/
 
 	//err = proxCluster.GetNode("pve").GetVM(102).GetIPSet("test").AddIPNetwork("10.0.0.1/32", "")
 
