@@ -91,6 +91,12 @@ func (proxmoxClient ProxmoxClient) Get(endpoint endpoints.Endpoint) (*responses.
 	})
 }
 
+func (proxmoxClient ProxmoxClient) Delete(endpoint endpoints.Endpoint) (*responses.ProxmoxResponse, error) {
+	return proxmoxClient.execute(func(session *ProxmoxSession) (*responses.ProxmoxResponse, error) {
+		return session.Delete(endpoint)
+	})
+}
+
 func (proxmoxClient ProxmoxClient) execute(data func(session *ProxmoxSession) (*responses.ProxmoxResponse, error)) (*responses.ProxmoxResponse, error) {
 	var session *ProxmoxSession
 	var err error

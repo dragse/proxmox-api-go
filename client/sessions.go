@@ -112,6 +112,20 @@ func (host ProxmoxSession) Get(endpoint endpoints.Endpoint) (*responses.ProxmoxR
 	return host.handleRequest(req)
 }
 
+func (host ProxmoxSession) Delete(endpoint endpoints.Endpoint) (*responses.ProxmoxResponse, error) {
+	target := host.formatProxmoxAPI(endpoint)
+
+	req, err := http.NewRequest("DELETE", target, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Authorization", "PVEAPIToken="+host.Username+"="+host.Token)
+
+	return host.handleRequest(req)
+}
+
 func (host ProxmoxSession) formatProxmoxAPI(endpoint endpoints.Endpoint) string {
 	return "https://" + host.Hostname + "/api2/json" + string(endpoint)
 }
