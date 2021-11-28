@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/dragse/proxmox-api-go/client"
 	"github.com/dragse/proxmox-api-go/proxmox"
+	"github.com/dragse/proxmox-api-go/proxmox/builder"
 	"log"
 )
 
@@ -45,7 +46,8 @@ func main() {
 		SetPool("test")
 	m, err := proxCluster.GetNode("pve").CreateVM(builder)*/
 
-	m, err := proxCluster.GetPool("test").GetDetail()
+	//m, err := proxCluster.GetPool("test").GetDetail()
+	m, err := proxCluster.GetNode("pve").GetVM(104).Clone(builder.NewVmCopyBuilder().SetFullCopy(true).SetPool("test").SetName("tcopy").SetTargetNode("pve").SetNewID(222))
 
 	if err != nil {
 		log.Fatal(err)
