@@ -29,6 +29,8 @@ The Proxmox API in golang. This Framework is still work in progress.
 - [x] Add CIDR to IPSet
 - [x] Remove CIDR from IPSet
 - [x] Copy a specific VM
+- [x] Update the config of a VM
+- [x] Resize a disk of a VM
 
 ### Pools
 - [x] Create Pool

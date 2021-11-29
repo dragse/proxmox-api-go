@@ -31,7 +31,9 @@ func NewVmBuilder() *VmBuilder {
 	return &VmBuilder{
 		osType:   operation_system.Other,
 		cores:    1,
+		sockets:  1,
 		networks: make([]string, 0),
+		memory:   util.NewBytesFromMegaBytes(512),
 	}
 }
 
@@ -92,14 +94,24 @@ func (b *VmBuilder) AddStorage(disk string, size string) *VmBuilder {
 
 func (b VmBuilder) BuildToValues() url.Values {
 	params := url.Values{}
-	params.Add("vmid", b.id)
-	params.Add("name", b.name)
+
+	if b.id != "" {
+		params.Add("vmid", b.id)
+	}
+
+	params.Add("cores", strconv.Itoa(b.cores))
 	params.Add("ostype", string(b.osType))
 	params.Add("scsihw", "virtio-scsi-pci")
 	params.Add("sockets", strconv.Itoa(b.sockets))
-	params.Add("cores", strconv.Itoa(b.cores))
 	params.Add("memory", strconv.FormatInt(b.memory.ToMegaByte(), 10))
-	params.Add("cpu", b.cpuType)
+
+	if b.cpuType != "" {
+		params.Add("cpu", b.cpuType)
+	}
+
+	if b.name != "" {
+		params.Add("name", b.name)
+	}
 
 	if b.pool != "" {
 		params.Add("pool", b.pool)

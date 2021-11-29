@@ -1,10 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/dragse/proxmox-api-go/client"
 	"github.com/dragse/proxmox-api-go/proxmox"
 	"github.com/dragse/proxmox-api-go/proxmox/builder"
+	"github.com/dragse/proxmox-api-go/static/disk"
+	"github.com/dragse/proxmox-api-go/util"
 	"log"
 )
 
@@ -47,12 +48,30 @@ func main() {
 	m, err := proxCluster.GetNode("pve").CreateVM(builder)*/
 
 	//m, err := proxCluster.GetPool("test").GetDetail()
-	m, err := proxCluster.GetNode("pve").GetVM(104).Clone(builder.NewVmCopyBuilder().SetFullCopy(true).SetPool("test").SetName("tcopy").SetTargetNode("pve").SetNewID(222))
+	_, err = proxCluster.GetNode("pve").GetVM(222).Clone(builder.NewVmCopyBuilder().SetFullCopy(true).SetPool("test").SetName("tcopy").SetTargetNode("pve").SetNewID(104))
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+
+	copyBuilder := builder.NewVmBuilder().
+		SetName("updateName").
+		SetCoresPerSocket(4).
+		SetMemory(util.NewBytesFromGigaBytes(16))
+
+	err = proxCluster.GetNode("pve").GetVM(104).UpdateConfigASync(copyBuilder)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	test, _ := json.Marshal(m)
-	log.Println(string(test))
+	err = proxCluster.GetNode("pve").GetVM(104).Resize(disk.Scsi0, util.NewBytesFromGigaBytes(20))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//test, _ := json.Marshal(m)
+	//log.Println(string(test))
 }

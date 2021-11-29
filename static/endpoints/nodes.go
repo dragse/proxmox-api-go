@@ -20,6 +20,7 @@ const (
 	Nodes_Node_Qemu_VMID_StatusSuspend             Endpoint = "/nodes/{val}/qemu/{val}/status/suspend"
 	Nodes_node_Qemu_VMID_Clone                     Endpoint = "/nodes/{val}/qemu/{val}/clone"
 	Nodes_node_Qemu_VMID_Config                    Endpoint = "/nodes/{val}/qemu/{val}/config"
+	Nodes_node_Qemu_VMID_Resize                    Endpoint = "/nodes/{val}/qemu/{val}/resize"
 	Nodes_node_Qemu_VMID_Vncproxy                  Endpoint = "/nodes/{val}/qemu/{val}/vncproxy"
 	Nodes_node_Qemu_VMID_Vncwebsocket              Endpoint = "/nodes/{val}/qemu/{val}/vncwebsocket"
 	Nodes_Node_Status                              Endpoint = "/nodes/{val}/status"
