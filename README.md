@@ -40,7 +40,7 @@ The Proxmox API in golang. This Framework is still work in progress.
 
 ## Installation
 
-``go get github.com/DragSE/proxmox-api-go``
+``go get github.com/dragse/proxmox-api-go@v1.1.0``
 
 ## Usage
 
