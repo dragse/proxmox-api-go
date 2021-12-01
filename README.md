@@ -31,6 +31,7 @@ The Proxmox API in golang. This Framework is still work in progress.
 - [x] Copy a specific VM
 - [x] Update the config of a VM
 - [x] Resize a disk of a VM
+- [x] Set CloudInitOptions
 
 ### Pools
 - [x] Create Pool

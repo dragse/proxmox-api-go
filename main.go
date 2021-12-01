@@ -48,7 +48,7 @@ func main() {
 	m, err := proxCluster.GetNode("pve").CreateVM(builder)*/
 
 	//m, err := proxCluster.GetPool("test").GetDetail()
-	_, err = proxCluster.GetNode("pve").GetVM(222).Clone(builder.NewVmCopyBuilder().SetFullCopy(true).SetPool("test").SetName("tcopy").SetTargetNode("pve").SetNewID(104))
+	//_, err = proxCluster.GetNode("pve").GetVM(105).Clone(builder.NewVmCopyBuilder().SetFullCopy(true).SetPool("test").SetName("copy").SetTargetNode("pve").SetNewID(999))
 
 	if err != nil {
 
@@ -56,17 +56,28 @@ func main() {
 	}
 
 	copyBuilder := builder.NewVmBuilder().
-		SetName("updateName").
+		SetName("cloudCoyp").
 		SetCoresPerSocket(4).
-		SetMemory(util.NewBytesFromGigaBytes(16))
+		SetMemory(util.NewBytesFromGigaBytes(16)).
+		SetCloudInitDrive("local-lvm").
+		SetCloudInit(builder.NewCloudInitBuilder().
+			SetNameservers("1.1.1.1").
+			SetUser("hans").
+			AddIPConfig("10.0.0.10/24", "10.0.0.1", "", ""))
 
-	err = proxCluster.GetNode("pve").GetVM(104).UpdateConfigASync(copyBuilder)
+	vals := copyBuilder.BuildToValues()
+
+	for k, v := range vals {
+		log.Println(k, " => ", v)
+	}
+
+	err = proxCluster.GetNode("pve").GetVM(999).UpdateConfigASync(copyBuilder)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = proxCluster.GetNode("pve").GetVM(104).Resize(disk.Scsi0, util.NewBytesFromGigaBytes(20))
+	err = proxCluster.GetNode("pve").GetVM(999).Resize(disk.Scsi0, util.NewBytesFromGigaBytes(20))
 
 	if err != nil {
 		log.Fatal(err)

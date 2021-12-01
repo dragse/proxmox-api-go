@@ -14,17 +14,19 @@ type storage struct {
 }
 
 type VmBuilder struct {
-	id       string
-	name     string
-	osType   operation_system.OSType
-	cpuType  string
-	cores    int
-	sockets  int
-	memory   *util.Byte
-	networks []string
-	storages []*storage
-	iso      *storage
-	pool     string
+	id               string
+	name             string
+	osType           operation_system.OSType
+	cpuType          string
+	cores            int
+	sockets          int
+	memory           *util.Byte
+	networks         []string
+	storages         []*storage
+	iso              *storage
+	cloudInit        string
+	pool             string
+	cloudInitBuilder *CloudInitBuilder
 }
 
 func NewVmBuilder() *VmBuilder {
@@ -77,6 +79,16 @@ func (b *VmBuilder) SetPool(pool string) *VmBuilder {
 	return b
 }
 
+func (b *VmBuilder) SetCloudInitDrive(drive string) *VmBuilder {
+	b.cloudInit = drive
+	return b
+}
+
+func (b *VmBuilder) SetCloudInit(cloudInit *CloudInitBuilder) *VmBuilder {
+	b.cloudInitBuilder = cloudInit
+	return b
+}
+
 func (b *VmBuilder) SetIso(disk string, isoFile string) *VmBuilder {
 	b.iso = &storage{storageType: disk, storageSize: isoFile}
 	return b
@@ -117,6 +129,10 @@ func (b VmBuilder) BuildToValues() url.Values {
 		params.Add("pool", b.pool)
 	}
 
+	if b.cloudInit != "" {
+		params.Add("ide0", b.cloudInit+":cloudinit,media=cdrom")
+	}
+
 	if b.iso != nil {
 		params.Add("ide2", b.iso.storageType+":iso/"+b.iso.storageSize+",media=cdrom")
 	}
@@ -127,6 +143,18 @@ func (b VmBuilder) BuildToValues() url.Values {
 
 	for i, network := range b.networks {
 		params.Add("net"+strconv.Itoa(i), "virtio,bridge="+network+",firewall=1")
+	}
+
+	if b.cloudInitBuilder != nil {
+		cloudValues := b.cloudInitBuilder.BuildToValues()
+		for k, v := range cloudValues {
+
+			if len(v) == 0 {
+				continue
+			}
+
+			params.Add(k, v[0])
+		}
 	}
 
 	return params
