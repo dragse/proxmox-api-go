@@ -48,7 +48,7 @@ func main() {
 	m, err := proxCluster.GetNode("pve").CreateVM(builder)*/
 
 	//m, err := proxCluster.GetPool("test").GetDetail()
-	//_, err = proxCluster.GetNode("pve").GetVM(105).Clone(builder.NewVmCopyBuilder().SetFullCopy(true).SetPool("test").SetName("copy").SetTargetNode("pve").SetNewID(999))
+	_, err = proxCluster.GetNode("pve").GetVM(105).Clone(builder.NewVmCopyBuilder().SetFullCopy(true).SetPool("test").SetName("copy").SetTargetNode("pve").SetNewID(999))
 
 	if err != nil {
 
