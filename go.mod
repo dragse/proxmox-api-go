@@ -1,3 +1,3 @@
-module github.com/dragse/proxmox-api-go/v1
+module github.com/dragse/proxmox-api-go
 
 go 1.15
